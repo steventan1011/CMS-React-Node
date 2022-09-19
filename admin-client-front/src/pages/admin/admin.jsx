@@ -11,9 +11,9 @@ import Category from '../category/category'
 // import Product from '../product/product'
 // import Role from '../role/role'
 // import User from '../user/user'
-// import Bar from '../charts/bar'
-// import Line from '../charts/line'
-// import Pie from '../charts/pie'
+import Bar from '../charts/bar'
+import Line from '../charts/line'
+import Pie from '../charts/pie'
 import NotFound from '../not-found/not-found'
 // import Order from '../order/order'
 
@@ -39,13 +39,13 @@ class Admin extends Component {
                   <Route path="/" element={<Navigate to ="/home" />}/>
                   <Route path='home' element={<Home />}/>
                   <Route path='/category' element={<Category />}/>
-                  {/* <Route path='/product' element={<Product />}/>
-                  <Route path='/role' element={<Role />}/>
-                  <Route path='/user' element={<User />}/>
+                  {/* <Route path='/product' element={<Product />}/> */}
+                  {/* <Route path='/role' element={<Role />}/> */}
+                  {/* <Route path='/user' element={<User />}/> */}
                   <Route path='/charts/bar' element={<Bar />}/>
                   <Route path='/charts/line' element={<Line />}/>
                   <Route path='/charts/pie' element={<Pie />}/>
-                  <Route path="/order" element={<Order />}/> */}
+                  {/* <Route path="/order" element={<Order />}/> */}
                   <Route path="*" element={<NotFound />}/>
                 </Routes>
                 
