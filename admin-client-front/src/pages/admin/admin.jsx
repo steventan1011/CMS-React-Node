@@ -8,8 +8,8 @@ import LeftNav from '../../components/left-nav'
 import Header from '../../components/header'
 import Home from '../home/home'
 import Category from '../category/category'
-// import Product from '../product/product'
-// import Role from '../role/role'
+import Product from '../product/product'
+import Role from '../role/role'
 // import User from '../user/user'
 import Bar from '../charts/bar'
 import Line from '../charts/line'
@@ -39,8 +39,8 @@ class Admin extends Component {
                   <Route path="/" element={<Navigate to ="/home" />}/>
                   <Route path='home' element={<Home />}/>
                   <Route path='/category' element={<Category />}/>
-                  {/* <Route path='/product' element={<Product />}/> */}
-                  {/* <Route path='/role' element={<Role />}/> */}
+                  <Route path='/product' element={<Product />}/>
+                  <Route path='/role' element={<Role />}/>
                   {/* <Route path='/user' element={<User />}/> */}
                   <Route path='/charts/bar' element={<Bar />}/>
                   <Route path='/charts/line' element={<Line />}/>
