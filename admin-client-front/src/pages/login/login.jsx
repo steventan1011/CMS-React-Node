@@ -9,42 +9,30 @@ import logo from '../../assets/images/logo.png'
 import {login} from '../../redux/actions'
 
 import Home from '../home/home'
+import Admin from '../admin/admin'
 
 class Login extends Component {
 
     /*
         Handle submit action when click the submit button
     */
-    handleSubmit = (event) => {
-        console.log("123")
-
-        // default for blocking events from blank
-        event.preventDefault()
-
-        // validate all form fields
-        this
-            .props
-            .form
-            .validateFields(async (err, values) => {
-                if (!err) { // if succuss
-                    console.log("456")
-                    const {username, password} = values
-                    // call the asyncronous login function
-                    this
-                        .props
-                        .login(username, password)
-
-                } else { // if fails
-                    console.log('checked fails!')
-                }
-            });
+    handleSubmit = (values) => {
+        const {username, password} = values
+        // call the asyncronous login function
+        this.props.login(username, password)
     }
 
+    handleSubmitFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
     render() {
+        
+
         // If the user is already logged in, automatically jump to the admin page
         const user = this.props.user
         if (user && user._id) {
-            return <Routes><Route path="/*" element={<Home />}/></Routes>
+            return <Routes><Route path="*" element={<Navigate to="/" />}/></Routes>
         }
 
         return (
@@ -53,13 +41,13 @@ class Login extends Component {
                     <img src={logo} alt="logo"/>
                     <h1>React + Node: Content Management System</h1>
                 </header>
-                <div className="login-content">
+                <section className="login-content">
                     <div
                         className={user.errorMsg
                             ? 'error-msg show'
                             : 'error-msg'}>{user.errorMsg}</div>
                     <h2>User Login</h2>
-                    <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form onFinish={this.handleSubmit} onFinishFailed={this.handleSubmitFailed} className="login-form">
                         {/* Validity requirements for username/password
                                         1). No blank
                                         2). Must be greater than or equal to 4 digits
@@ -84,8 +72,7 @@ class Login extends Component {
                                     message: 'Username must be composed of letters, numbers or underscores'
                                 }
                             ]}
-                            initialValue= 'admin'
-                            >
+                            initialValue = 'admin'>
                             <Input
                                 prefix={<UserOutlined style = {{ color: 'rgba(0,0,0,.25)' }}/>}
                                 placeholder="username"/>
@@ -121,7 +108,8 @@ class Login extends Component {
                             </Button>
                         </Form.Item>
                     </Form>
-                </div>
+                </section>
+                {/* <div className="login-blank" /> */}
             </div>
         )
     }
