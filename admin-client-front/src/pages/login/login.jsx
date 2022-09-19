@@ -16,6 +16,8 @@ class Login extends Component {
         Handle submit action when click the submit button
     */
     handleSubmit = (event) => {
+        console.log("123")
+
         // default for blocking events from blank
         event.preventDefault()
 
@@ -25,6 +27,7 @@ class Login extends Component {
             .form
             .validateFields(async (err, values) => {
                 if (!err) { // if succuss
+                    console.log("456")
                     const {username, password} = values
                     // call the asyncronous login function
                     this
@@ -32,7 +35,7 @@ class Login extends Component {
                         .login(username, password)
 
                 } else { // if fails
-                    console.log('检验失败!')
+                    console.log('checked fails!')
                 }
             });
     }
@@ -50,7 +53,7 @@ class Login extends Component {
                     <img src={logo} alt="logo"/>
                     <h1>React + Node: Content Management System</h1>
                 </header>
-                <section className="login-content">
+                <div className="login-content">
                     <div
                         className={user.errorMsg
                             ? 'error-msg show'
@@ -80,7 +83,9 @@ class Login extends Component {
                                     pattern: /^[a-zA-Z0-9_]+$/,
                                     message: 'Username must be composed of letters, numbers or underscores'
                                 }
-                            ]}>
+                            ]}
+                            initialValue= 'admin'
+                            >
                             <Input
                                 prefix={<UserOutlined style = {{ color: 'rgba(0,0,0,.25)' }}/>}
                                 placeholder="username"/>
@@ -116,7 +121,7 @@ class Login extends Component {
                             </Button>
                         </Form.Item>
                     </Form>
-                </section>
+                </div>
             </div>
         )
     }
