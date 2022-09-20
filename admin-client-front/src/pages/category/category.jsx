@@ -4,17 +4,22 @@ import {
   Table,
   Button,
   message,
-  Modal
+  Modal,
+  Form,
+  Select,
+  Input
 } from 'antd'
 import {ArrowRightOutlined, PlusOutlined} from "@ant-design/icons";
 
 import LinkButton from '../../components/link-button'
 import {reqCategorys, reqUpdateCategory, reqAddCategory} from '../../api'
-import AddForm from './add-form'
-import UpdateForm from './update-form'
 
+const Item = Form.Item
+const Option = Select.Option
 
 export default class Category extends Component {
+  addFormRef = React.createRef()
+  updateFormRef = React.createRef()
 
   state = {
     loading: false, // whether is requiring data
@@ -41,7 +46,6 @@ export default class Category extends Component {
           <span>
             <LinkButton onClick={() => this.showUpdate(category)}>Update category</LinkButton>
             {this.state.parentId==='0' ? <LinkButton onClick={() => this.showSubCategorys(category)}>View subcategories</LinkButton> : null}
-
           </span>
         )
       }
@@ -112,8 +116,15 @@ export default class Category extends Component {
   /*
   In response to click cancel: hide the OK box
    */
-  handleCancel = () => {
-    this.form.resetFields()
+  handleAddFormCancel = () => {
+    this.addFormRef.current.resetFields()
+    this.setState({
+      showStatus: 0
+    })
+  }
+
+  handleUpdateFormCancel = () => {
+    this.updateFormRef.current.resetFields()
     this.setState({
       showStatus: 0
     })
@@ -131,26 +142,27 @@ export default class Category extends Component {
   /*
   add category
    */
-  addCategory = () => {
-    this.form.validateFields(async (err, values) => {
-      if (!err) {
+  addCategory = async () => {
+    this.addFormRef.current.validateFields()
+      .then(async values => {
         this.setState({
           showStatus: 0
         })
 
         const {parentId, categoryName} = values
-        this.form.resetFields()
+        this.addFormRef.current.resetFields()
         const result = await reqAddCategory(categoryName, parentId)
         if(result.status===0) {
 
           if(parentId===this.state.parentId) {
             this.getCategorys()
-          } else if (parentId==='0'){ 
+          } else if (parentId==='0'){
             this.getCategorys('0')
           }
         }
       }
-    })
+    )
+    .catch(errorInfo => console.log("FAILED", errorInfo))
   }
 
 
@@ -167,27 +179,26 @@ export default class Category extends Component {
   /*
   Update classification
    */
-  updateCategory = () => {
+  updateCategory = async () => {
     console.log('updateCategory()')
-    this.form.validateFields(async (err, values) => {
-      if(!err) {
+    this.updateFormRef.current.validateFields()
+      .then(async values => {
         this.setState({
           showStatus: 0
         })
 
         const categoryId = this.category._id
         const {categoryName} = values
-        this.form.resetFields()
+        this.updateFormRef.current.resetFields()
 
         const result = await reqUpdateCategory({categoryId, categoryName})
         if (result.status===0) {
           this.getCategorys()
         }
-      }
-    })
-
-
+      })
+      .catch(errorInfo => console.log("FAILED", errorInfo))
   }
+
 
 
 
@@ -208,7 +219,7 @@ export default class Category extends Component {
   render() {
 
     const {categorys, subCategorys, parentId, parentName, loading, showStatus} = this.state
-    const category = this.category || {} 
+    const category = this.category || {}
 
     // the left side of the card
     const title = parentId === '0' ? 'First-level category list' : (
@@ -241,25 +252,37 @@ export default class Category extends Component {
           title="Add category"
           visible={showStatus===1}
           onOk={this.addCategory}
-          onCancel={this.handleCancel}
+          onCancel={this.handleAddFormCancel}
         >
-          <AddForm
-            categorys={categorys}
-            parentId={parentId}
-            setForm={(form) => {this.form = form}}
-          />
+          <Form ref={this.addFormRef}>
+            <Item name='parentId' initialValue={parentId}>
+                  <Select>
+                    <Option value='0'>First class category</Option>
+                    {
+                      categorys.map(c => <Option value={c._id}>{c.name}</Option>)
+                    }
+                  </Select>
+            </Item>
+
+            <Item name='categoryName' initialValue='' rules={[{required: true, message: 'Must input the category name'}]}>
+                  <Input placeholder='Please input the category name'/>
+            </Item>
+          </Form>
         </Modal>
 
         <Modal
           title="Update category"
           visible={showStatus===2}
           onOk={this.updateCategory}
-          onCancel={this.handleCancel}
+          onCancel={this.handleUpdateFormCancel}
         >
-          <UpdateForm
-            categoryName={category.name}
-            setForm={(form) => {this.form = form}}
-          />
+          <Form ref={this.updateFormRef}>
+            <Item name='categoryName' 
+                initialValue={category.name} 
+                rules={[{required: true, message: 'Must input the category name'}]}>
+                  <Input placeholder='Please input the category name'/>
+            </Item>
+          </Form>
         </Modal>
       </Card>
     )

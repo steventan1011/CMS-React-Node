@@ -4,26 +4,26 @@ import {
   Button,
   Table,
   Modal,
-  message
+  message,
+  Form,
+  Input,
+  Select
 } from 'antd'
 import {formateDate} from "../../utils/dateUtils"
 import LinkButton from "../../components/link-button/index"
-import {reqDeleteUser, reqFindUserById, reqUsers, reqAddOrUpdateUser} from "../../api/index";
-import UserForm from './user-form'
+import {reqDeleteUser, reqUsers, reqAddOrUpdateUser} from "../../api/index";
+
+const Item = Form.Item
+const Option = Select.Option
 
 export default class User extends Component {
+
+  userFormRef = React.createRef()
 
   state = {
     users: [], // user list
     roles: [], // role list
     isShow: false, // whether to show confirmation box
-    form: {
-      username: '', 
-      password: '', 
-      phone: '', 
-      email: '', 
-      role_id: '' 
-    },  // the form of Modal
   }
 
   initColumns = () => {
@@ -108,14 +108,6 @@ export default class User extends Component {
     })
   }
 
-  // to transfer props to the UserForm
-  setForm = (event) => {
-    console.log(event)
-    let {form} = this.state
-    form[event.target.id] = event.target.value
-    this.setState({form})
-  }
-
   /*
   add or update user
    */
@@ -123,24 +115,22 @@ export default class User extends Component {
 
     this.setState({isShow: false})
 
-    console.log(this.state.form)
-    const user = this.state.form
+    const user = this.userFormRef.current.getFieldsValue()
+    this.userFormRef.current.resetFields()
     if (this.user) {
       user._id = this.user._id
     }
 
-    const preUser = await reqFindUserById(user._id)
-    for (let key in user) {
-      if (user[key] === '') {
-        user[key] = preUser[key]
-      }
-    }
-
     const result = await reqAddOrUpdateUser(user)
     if(result.status===0) {
-      message.success(`${this.user ? 'update' : 'add'} user successfully`)
+      message.success(`${this.user ? 'Update' : 'Add'} user successfully`)
       this.getUsers()
     }
+  }
+
+  handleCancel = () => {
+    this.userFormRef.current.resetFields()
+    this.setState({isShow: false})
   }
 
   getUsers = async () => {
@@ -166,7 +156,7 @@ export default class User extends Component {
     const {users, roles, isShow} = this.state
     const user = this.user || {}
 
-    const title = <Button type='primary' onClick={this.showAdd}>创建用户</Button>
+    const title = <Button type='primary' onClick={this.showAdd}>Add user</Button>
 
     return (
       <Card title={title}>
@@ -182,15 +172,40 @@ export default class User extends Component {
           title={user._id ? 'Update user' : 'Add user'}
           visible={isShow}
           onOk={this.addOrUpdateUser}
-          onCancel={() => {
-            this.setState({isShow: false})
-          }}
+          onCancel={this.handleCancel}
         >
-          <UserForm
-            setForm={this.setForm}
-            roles={roles}
-            user={user}
-          />
+          <Form ref={this.userFormRef} {...{
+            labelCol: { span: 4 }, 
+            wrapperCol: { span: 15 }, 
+          }}>
+            <Item label='username' name='username' initialValue={user.username}>
+                  <Input placeholder='Please enter username' />
+            </Item>
+
+            {
+              user._id ? null : (
+                <Item label='password' name="password" initialValue={user.password}>
+                      <Input type='password' placeholder='Please enter password'/>
+                </Item>
+              )
+            }
+
+            <Item label='phone' name='phone' initialValue={user.phone}>
+                  <Input placeholder='Please enter phone number'/>
+            </Item>
+
+            <Item label='email' name='email' initialValue={user.email}>
+                  <Input placeholder='Please enter email'/>
+            </Item>
+
+            <Item label='role' name='role_id' initialValue={user.role_id}>
+                  <Select>
+                    {
+                      roles.map(role => <Option key={role._id} value={role._id}>{role.name}</Option>)
+                    }
+                  </Select>
+            </Item>
+          </Form>
         </Modal>
 
       </Card>

@@ -4,19 +4,23 @@ import {
   Button,
   Table,
   Modal,
-  message
+  message,
+  Form,
+  Input
 } from 'antd'
 import {connect} from 'react-redux'
 
 import {PAGE_SIZE} from "../../utils/constants"
 import {reqRoles, reqAddRole, reqUpdateRole} from '../../api'
-import AddForm from './add-form'
 import AuthForm from './auth-form'
 import {formateDate} from '../../utils/dateUtils'
 import {logout} from '../../redux/actions'
 
+const Item = Form.Item
 
 class Role extends Component {
+
+  
 
   state = {
     roles: [], // List of all roles
@@ -28,8 +32,8 @@ class Role extends Component {
 
   constructor (props) {
     super(props)
-
-    this.auth = React.createRef()
+    this.addFormRef = React.createRef()
+    this.authFormRef = React.createRef()
   }
 
   initColumn = () => {
@@ -83,33 +87,35 @@ class Role extends Component {
 
   /*
   add role
-   */
+   */ 
   addRole = async () => {
-    let { inputTxt } = this.state
+    this.addFormRef.current.validateFields()
+      .then(async (values) => {
+        // hide confirmation box
+        this.setState({
+          isShowAdd: false
+        })
 
-    if (inputTxt !== '')
+        // collect input data
+        const {roleName} = values
+        this.addFormRef.current.resetFields()
 
-      // hide confirmation box
-      this.setState({
-        isShowAdd: false
+        // request to add role
+        const result = await reqAddRole(roleName)
+        // request to add role
+        if (result.status===0) {
+          message.success('Added role successfully')
+          const role = result.data
+          this.setState(state => ({
+            roles: [...state.roles, role]
+          }))
+
+        } else {
+          message.error('Failed to add role')
+        }
       })
-
-      // collect input data
-      const roleName = inputTxt
-
-      // request to add role
-      const result = await reqAddRole(roleName)
-      if (result.status===0) {
-        message.success('Added role successfully')
-        const role = result.data
-        this.setState(state => ({
-          roles: [...state.roles, role]
-        }))
-
-      } else {
-        message.success('Failed to add role')
-      }
-    }
+      .catch(_ => message.error('Failed to add role'))
+  }
 
   /*
   update role
@@ -123,7 +129,7 @@ class Role extends Component {
 
     const role = this.state.role
     // get the latest menus
-    const menus = this.auth.current.getMenus()
+    const menus = this.authFormRef.current.getMenus()
     role.menus = menus
     role.auth_time = Date.now()
     role.auth_name = this.props.user.username
@@ -189,12 +195,24 @@ class Role extends Component {
           onOk={this.addRole}
           onCancel={() => {
             this.setState({isShowAdd: false})
-            this.form.resetFields()
+            this.addFormRef.current.resetFields()
           }}
         >
-          <AddForm
-            setInputTxt={this.setInputTxt}
-          />
+          <Form ref={this.addFormRef}>
+            <Item label='Role name' {...{
+              labelCol: { span: 4 },
+              wrapperCol: { span: 15 },
+            }}
+              name="roleName"
+              rules={[
+                { 
+                  required: true, 
+                  message: 'Role name must be entered'
+                }]}
+              initialValue=''>
+                <Input placeholder='Please enter a role name' onChange={this.props.setInputTxt} />
+            </Item>
+          </Form>
         </Modal>
 
         <Modal
@@ -205,7 +223,7 @@ class Role extends Component {
             this.setState({isShowAuth: false})
           }}
         >
-          <AuthForm ref={this.auth} role={role}/>
+          <AuthForm ref={this.authFormRef} role={role}/>
         </Modal>
       </Card>
     )
