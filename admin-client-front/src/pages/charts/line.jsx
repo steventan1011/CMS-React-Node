@@ -51,7 +51,7 @@ export default class Line extends Component {
     return (
       <div>
         <Card>
-          <Button type='primary' onClick={this.update}>更新</Button>
+          <Button type='primary' onClick={this.update}>Update</Button>
         </Card>
 
         <Card title='Line Chart'>

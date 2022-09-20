@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import {Menu, Icon} from 'antd'
+import {Menu} from 'antd'
+import * as Icon from '@ant-design/icons'
 import {connect} from 'react-redux'
 import withRouter from '../../utils/withRouter'
 
@@ -37,86 +38,42 @@ class LeftNav extends Component {
 
   /*
   Generate the corresponding label array according to the data array of menu
-  Use map() + recursive call
-  */
-  getMenuNodes_map = (menuList) => {
-    return menuList.map(item => {
-      if(!item.children) {
-        return (
-          <Menu.Item key={item.key}>
-            <Link to={item.key}>
-              <Icon type={item.icon}/>
-              <span>{item.title}</span>
-            </Link>
-          </Menu.Item>
-        )
-      } else {
-        return (
-          <SubMenu
-            key={item.key}
-            title={
-              <span>
-              <Icon type={item.icon}/>
-              <span>{item.title}</span>
-            </span>
-            }
-          >
-            {this.getMenuNodes(item.children)}
-          </SubMenu>
-        )
-      }
-
-    })
-  }
-
-  /*
-  Generate the corresponding label array according to the data array of menu
   Use reduce() + recursive call
   */
   getMenuNodes = (menuList) => {
-    const path = this.props.location.pathname
-
-    return menuList.reduce((pre, item) => {
-
-      if (this.hasAuth(item)) {
-        if(!item.children) {
-          if (item.key===path || path.indexOf(item.key)===0) {
-            this.props.setHeadTitle(item.title)
-          }
-
-          pre.push((
-            <Menu.Item key={item.key}>
-              <Link to={item.key} onClick={() => this.props.setHeadTitle(item.title)}>
-                <Icon type={item.icon}/>
-                <span>{item.title}</span>
-              </Link>
-            </Menu.Item>
-          ))
-        } else {
-          const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
-          if (cItem) {
-            this.openKey = item.key
-          }
-
-          pre.push((
-            <SubMenu
-              key={item.key}
-              title={
-                  <span>
-                    <Icon type={item.icon}/>
-                    <span>{item.title}</span>
-                  </span>
-              }
-            >
-              {this.getMenuNodes(item.children)}
-            </SubMenu>
-          ))
-        }
-      }
-
-      return pre
-    }, [])
-  }
+    return  menuList.map(v => {
+       if (!v.children) {
+         const icon = React.createElement(
+           Icon[v.icon],
+           {
+             style:{ fontSize: '16px'}
+           }
+         )
+         return (
+           <Menu.Item key={v.key} icon={icon}>
+             <Link to={v.key}>
+               {v.title}
+             </Link>
+           </Menu.Item>
+         )
+       }else{
+          const icon= React.createElement(
+             Icon[v.icon],
+             {
+               style:{ fontSize: '16px'}
+             }
+           )
+         return (
+           <SubMenu key={v.key} title={v.title} icon={icon}>
+ 
+             {
+               this.getMenuNodes(v.children)
+             }
+           </SubMenu>
+         )
+       }
+     })
+   }
 
   /*
     Execute once before the first render()
@@ -137,6 +94,7 @@ class LeftNav extends Component {
     const openKey = this.openKey
 
     return (
+      
       <div className="left-nav">
         <Link to='/' className="left-nav-header">
           <img src={logo} alt="logo"/>

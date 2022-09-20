@@ -2,23 +2,23 @@ const menuList = [
   {
     title: 'Home', 
     key: '/home', 
-    icon: 'home', 
+    icon: 'HomeOutlined', 
     isPublic: true, 
   },
   {
     title: 'Product',
     key: '/products',
-    icon: 'appstore',
+    icon: 'AppstoreOutlined',
     children: [
       {
         title: 'Category Management',
         key: '/category',
-        icon: 'bars'
+        icon: 'BarsOutlined'
       },
       {
         title: 'Product Management',
         key: '/product',
-        icon: 'tool'
+        icon: 'ToolOutlined'
       },
     ]
   },
@@ -26,42 +26,37 @@ const menuList = [
   {
     title: 'User Management',
     key: '/user',
-    icon: 'user'
+    icon: 'UserOutlined'
   },
   {
     title: 'Role Management',
     key: '/role',
-    icon: 'safety',
+    icon: 'SafetyOutlined',
   },
 
   {
     title: 'Charts',
     key: '/charts',
-    icon: 'area-chart',
+    icon: 'AreaChartOutlined',
     children: [
       {
         title: 'Bar chart',
         key: '/charts/bar',
-        icon: 'bar-chart'
+        icon: 'BarChartOutlined'
       },
       {
         title: 'Line chart',
         key: '/charts/line',
-        icon: 'line-chart'
+        icon: 'LineChartOutlined'
       },
       {
         title: 'Pie chart',
         key: '/charts/pie',
-        icon: 'pie-chart'
+        icon: 'PieChartOutlined'
       },
     ]
-  },
+  }
 
-  {
-    title: 'Order Management',
-    key: '/order',
-    icon: 'windows',
-  },
 ]
 
 export default menuList
