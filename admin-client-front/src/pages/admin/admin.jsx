@@ -3,7 +3,6 @@ import {Navigate, Routes, Route, useNavigate, Outlet} from 'react-router-dom'
 import {Layout} from 'antd'
 import {connect} from 'react-redux'
 
-// import Login from '../login/login'
 import LeftNav from '../../components/left-nav'
 import Header from '../../components/header'
 import Home from '../home/home'
@@ -15,7 +14,6 @@ import Bar from '../charts/bar'
 import Line from '../charts/line'
 import Pie from '../charts/pie'
 import NotFound from '../not-found/not-found'
-// import Order from '../order/order'
 
 const { Footer, Sider, Content } = Layout
 
@@ -45,7 +43,6 @@ class Admin extends Component {
                   <Route path='/charts/bar' element={<Bar />}/>
                   <Route path='/charts/line' element={<Line />}/>
                   <Route path='/charts/pie' element={<Pie />}/>
-                  {/* <Route path="/order" element={<Order />}/> */}
                   <Route path="*" element={<NotFound />}/>
                 </Routes>
                 

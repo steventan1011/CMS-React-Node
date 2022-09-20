@@ -9,13 +9,10 @@ import {
 const Item = Form.Item
 const Option = Select.Option
 
-/*
-添加/修改用户的form组件
- */
 class UserForm extends PureComponent {
   formRef = React.createRef();
   static propTypes = {
-    setForm: PropTypes.func.isRequired, // 用来传递form对象的函数
+    setForm: PropTypes.func.isRequired, // transfer form to the parent component
     roles: PropTypes.array.isRequired,
     user: PropTypes.object
   }
@@ -23,10 +20,9 @@ class UserForm extends PureComponent {
   render() {
 
     const {roles, user} = this.props
-    // 指定Item布局的配置对象
     const formItemLayout = {
-      labelCol: { span: 4 },  // 左侧label的宽度
-      wrapperCol: { span: 15 }, // 右侧包裹的宽度
+      labelCol: { span: 4 }, 
+      wrapperCol: { span: 15 }, 
     }
 
     return (

@@ -11,15 +11,12 @@ import LinkButton from "../../components/link-button/index"
 import {reqDeleteUser, reqFindUserById, reqUsers, reqAddOrUpdateUser} from "../../api/index";
 import UserForm from './user-form'
 
-/*
-用户路由
- */
 export default class User extends Component {
 
   state = {
-    users: [], // 所有用户列表
-    roles: [], // 所有角色列表
-    isShow: false, // 是否显示确认框
+    users: [], // user list
+    roles: [], // role list
+    isShow: false, // whether to show confirmation box
     form: {
       username: '', 
       password: '', 
@@ -67,27 +64,26 @@ export default class User extends Component {
   }
 
   /*
-  根据role的数组, 生成包含所有角色名的对象(属性名用角色id值)
+  According to the array of roles, generate an object containing all role names (the attribute name uses the role id value)
    */
   initRoleNames = (roles) => {
     const roleNames = roles.reduce((pre, role) => {
       pre[role._id] = role.name
       return pre
     }, {})
-    // 保存
     this.roleNames = roleNames
   }
 
   /*
-  显示添加界面
+  show add interface
    */
   showAdd = () => {
-    this.user = null // 去除前面保存的user
+    this.user = null 
     this.setState({isShow: true})
   }
 
   /*
-  显示修改界面
+  show update interface
    */
   showUpdate = (user) => {
     this.user = user // 保存user
@@ -97,7 +93,7 @@ export default class User extends Component {
   }
 
   /*
-  删除指定用户
+  delete user by id
    */
   deleteUser = (user) => {
     Modal.confirm({
@@ -112,6 +108,7 @@ export default class User extends Component {
     })
   }
 
+  // to transfer props to the UserForm
   setForm = (event) => {
     console.log(event)
     let {form} = this.state
@@ -120,16 +117,14 @@ export default class User extends Component {
   }
 
   /*
-  添加/更新用户
+  add or update user
    */
   addOrUpdateUser = async () => {
 
     this.setState({isShow: false})
 
-    // 1. 收集输入数据
     console.log(this.state.form)
     const user = this.state.form
-    // 如果是更新, 需要给user指定_id属性
     if (this.user) {
       user._id = this.user._id
     }
@@ -141,9 +136,7 @@ export default class User extends Component {
       }
     }
 
-    // 2. 提交添加的请求
     const result = await reqAddOrUpdateUser(user)
-    // 3. 更新列表显示
     if(result.status===0) {
       message.success(`${this.user ? 'update' : 'add'} user successfully`)
       this.getUsers()
@@ -162,11 +155,8 @@ export default class User extends Component {
     }
   }
 
-  componentWillMount () {
-    this.initColumns()
-  }
-
   componentDidMount () {
+    this.initColumns()
     this.getUsers()
   }
 
@@ -189,7 +179,7 @@ export default class User extends Component {
         />
 
         <Modal
-          title={user._id ? '修改用户' : '添加用户'}
+          title={user._id ? 'Update user' : 'Add user'}
           visible={isShow}
           onOk={this.addOrUpdateUser}
           onCancel={() => {

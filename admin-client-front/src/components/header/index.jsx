@@ -56,6 +56,7 @@ class Header extends Component {
       onOk: () => {
         console.log('OK', this)
         this.props.logout()
+        this.props.navigate("/")
       }
     })
   }
