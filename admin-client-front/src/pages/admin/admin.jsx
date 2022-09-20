@@ -10,7 +10,7 @@ import Home from '../home/home'
 import Category from '../category/category'
 import Product from '../product/product'
 import Role from '../role/role'
-// import User from '../user/user'
+import User from '../user/user'
 import Bar from '../charts/bar'
 import Line from '../charts/line'
 import Pie from '../charts/pie'
@@ -41,7 +41,7 @@ class Admin extends Component {
                   <Route path='/category' element={<Category />}/>
                   <Route path='/product' element={<Product />}/>
                   <Route path='/role' element={<Role />}/>
-                  {/* <Route path='/user' element={<User />}/> */}
+                  <Route path='/user' element={<User />}/>
                   <Route path='/charts/bar' element={<Bar />}/>
                   <Route path='/charts/line' element={<Line />}/>
                   <Route path='/charts/pie' element={<Pie />}/>

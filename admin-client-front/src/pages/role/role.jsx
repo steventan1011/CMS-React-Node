@@ -15,17 +15,15 @@ import AuthForm from './auth-form'
 import {formateDate} from '../../utils/dateUtils'
 import {logout} from '../../redux/actions'
 
-/*
-角色路由
- */
+
 class Role extends Component {
 
   state = {
-    roles: [], // 所有角色的列表
-    role: {}, // 选中的role
-    inputTxt: '',
-    isShowAdd: false, // 是否显示添加界面
-    isShowAuth: false, // 是否显示设置权限界面
+    roles: [], // List of all roles
+    role: {}, // selected role
+    inputTxt: '', // input role name
+    isShowAdd: false, // Whether to display the add interface
+    isShowAuth: false, // Whether to display the auth interface
   }
 
   constructor (props) {
@@ -37,21 +35,21 @@ class Role extends Component {
   initColumn = () => {
     this.columns = [
       {
-        title: '角色名称',
+        title: 'Role name',
         dataIndex: 'name'
       },
       {
-        title: '创建时间',
+        title: 'Create time',
         dataIndex: 'create_time',
         render: (create_time) => formateDate(create_time)
       },
       {
-        title: '授权时间',
+        title: 'Auth time',
         dataIndex: 'auth_time',
         render: formateDate
       },
       {
-        title: '授权人',
+        title: 'Authorizer',
         dataIndex: 'auth_name'
       },
     ]
@@ -70,9 +68,8 @@ class Role extends Component {
 
   onRow = (role) => {
     return {
-      onClick: event => { // 点击行
+      onClick: event => { 
         console.log('row onClick()', role)
-        // alert('点击行')
         this.setState({
           role
         })
@@ -85,74 +82,60 @@ class Role extends Component {
   }
 
   /*
-  添加角色
+  add role
    */
   addRole = async () => {
     let { inputTxt } = this.state
 
-    // 进行表单验证, 只能通过了才向下处理
     if (inputTxt !== '')
 
-      // 隐藏确认框
+      // hide confirmation box
       this.setState({
         isShowAdd: false
       })
 
-      // 收集输入数据
+      // collect input data
       const roleName = inputTxt
 
-      // 请求添加
+      // request to add role
       const result = await reqAddRole(roleName)
-      // 根据结果提示/更新列表显示
       if (result.status===0) {
-        message.success('添加角色成功')
-        // this.getRoles()
-        // 新产生的角色
+        message.success('Added role successfully')
         const role = result.data
-        // 更新roles状态
-        /*const roles = this.state.roles
-        roles.push(role)
-        this.setState({
-          roles
-        })*/
-
-        // 更新roles状态: 基于原本状态数据更新
         this.setState(state => ({
           roles: [...state.roles, role]
         }))
 
       } else {
-        message.success('添加角色失败')
+        message.success('Failed to add role')
       }
     }
 
   /*
-  更新角色
+  update role
    */
   updateRole = async () => {
 
-    // 隐藏确认框
+    // hide confirmation box
     this.setState({
       isShowAuth: false
     })
 
     const role = this.state.role
-    // 得到最新的menus
+    // get the latest menus
     const menus = this.auth.current.getMenus()
     role.menus = menus
     role.auth_time = Date.now()
     role.auth_name = this.props.user.username
 
-    // 请求更新
+    // request to update role
     const result = await reqUpdateRole(role)
     if (result.status===0) {
-      // this.getRoles()
-      // 如果当前更新的是自己角色的权限, 强制退出
       if (role._id === this.props.user.role_id) {
         this.props.logout()
-        message.success('当前用户角色权限成功')
+        message.success('Current role successfully')
       } else {
-        message.success('设置角色权限成功')
+        message.success('Updated role successfully')
         this.setState({
           roles: [...this.state.roles]
         })
@@ -174,8 +157,8 @@ class Role extends Component {
 
     const title = (
       <span>
-        <Button type='primary' onClick={() => this.setState({isShowAdd: true})}>创建角色</Button> &nbsp;&nbsp;
-        <Button type='primary' disabled={!role._id} onClick={() => this.setState({isShowAuth: true})}>设置角色权限</Button>
+        <Button type='primary' onClick={() => this.setState({isShowAdd: true})}>Add role</Button> &nbsp;&nbsp;
+        <Button type='primary' disabled={!role._id} onClick={() => this.setState({isShowAuth: true})}>Set role auth</Button>
       </span>
     )
 
@@ -190,7 +173,7 @@ class Role extends Component {
           rowSelection={{
             type: 'radio',
             selectedRowKeys: [role._id],
-            onSelect: (role) => { // 选择某个radio时回调
+            onSelect: (role) => {
               this.setState({
                 role
               })
@@ -215,7 +198,7 @@ class Role extends Component {
         </Modal>
 
         <Modal
-          title="设置角色权限"
+          title="Set role auth"
           visible={isShowAuth}
           onOk={this.updateRole}
           onCancel={() => {

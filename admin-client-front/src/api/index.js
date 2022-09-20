@@ -130,6 +130,16 @@ export const reqAddOrUpdateUser = (user) => ajax(
     'POST'
 )
 
+// find user by id
+export const reqFindUserById = (userId) => ajax(
+    BASE + '/manage/user/find',
+    {
+        userId
+    },
+    'GET'
+)
+
+
 // use jsonp to request data
 export const reqWeather = (city) => {
 

@@ -11,9 +11,6 @@ const Item = Form.Item
 
 const { TreeNode } = Tree;
 
-/*
-添加分类的form组件
- */
 export default class AuthForm extends PureComponent {
 
   static propTypes = {
@@ -23,7 +20,7 @@ export default class AuthForm extends PureComponent {
   constructor (props) {
     super(props)
 
-    // 根据传入角色的menus生成初始状态
+    // Generate initial state based on incoming character menus
     const {menus} = this.props.role
     this.state = {
       checkedKeys: menus
@@ -31,7 +28,7 @@ export default class AuthForm extends PureComponent {
   }
 
   /*
-  为父组件提交获取最新menus数据的方法
+  Submit a method to get the latest menu data for the parent component
    */
   getMenus = () => this.state.checkedKeys
 
@@ -47,7 +44,7 @@ export default class AuthForm extends PureComponent {
     }, [])
   }
 
-  // 选中某个node时的回调
+  // Callback when a node is selected
   onCheck = checkedKeys => {
     console.log('onCheck', checkedKeys);
     this.setState({ checkedKeys });
@@ -58,9 +55,8 @@ export default class AuthForm extends PureComponent {
     this.treeNodes = this.getTreeNodes(menuList)
   }
 
-  // 根据新传入的role来更新checkedKeys状态
   /*
-  当组件接收到新的属性时自动调用
+  Called automatically when the component receives a new property
    */
   componentWillReceiveProps (nextProps) {
     console.log('componentWillReceiveProps()', nextProps)
@@ -68,17 +64,16 @@ export default class AuthForm extends PureComponent {
     this.setState({
       checkedKeys: menus
     })
-    // this.state.checkedKeys = menus
   }
 
   render() {
     console.log('AuthForm render()')
     const {role} = this.props
     const {checkedKeys} = this.state
-    // 指定Item布局的配置对象
+    // specifying the Item layout
     const formItemLayout = {
-      labelCol: { span: 4 },  // 左侧label的宽度
-      wrapperCol: { span: 15 }, // 右侧包裹的宽度
+      labelCol: { span: 4 },  // the width of the left label
+      wrapperCol: { span: 15 }, // the width of the right wrap
     }
 
     return (

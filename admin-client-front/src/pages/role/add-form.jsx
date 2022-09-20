@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
 import {
   Form,
   Input
@@ -9,16 +8,14 @@ import withRouter from '../../utils/withRouter'
 
 const Item = Form.Item
 
-/*
-添加分类的form组件
- */
+
 class AddForm extends Component {
 
   render() {
-    // 指定Item布局的配置对象
+    // specifying the Item layout
     const formItemLayout = {
-      labelCol: { span: 4 },  // 左侧label的宽度
-      wrapperCol: { span: 15 }, // 右侧包裹的宽度
+      labelCol: { span: 4 },  // the width of the left label
+      wrapperCol: { span: 15 }, // the width of the right wrap
     }
 
     return (
@@ -30,7 +27,7 @@ class AddForm extends Component {
               required: true, 
               message: 'Role name must be entered'
             }]}
-            initialValue=''>
+          initialValue=''>
             <Input placeholder='Please enter a role name' onChange={this.props.setInputTxt} />
         </Item>
       </Form>

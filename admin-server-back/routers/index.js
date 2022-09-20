@@ -92,6 +92,20 @@ router.post('/manage/user/delete', (req, res) => {
     })
 })
 
+// find user by id
+router.get('/manage/user/find', (req, res) => {
+  const userId = req.query.userId
+  UserModel.findById(userId)
+    .then(user => {
+      res.send({status: 0, data: user})
+    })
+    .catch(error => {
+      console.error('error to update', error)
+      res.send({status: 1, msg: 'Error to find the user, please try again.'})
+    })
+
+})
+
 // get user list
 router.get('/manage/user/list', (req, res) => {
   UserModel.find({username: {'$ne': 'admin'}})
