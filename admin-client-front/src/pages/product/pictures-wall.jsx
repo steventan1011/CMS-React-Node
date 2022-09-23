@@ -5,8 +5,9 @@ import { PlusOutlined } from '@ant-design/icons'
 
 import {reqDeleteImg} from '../../api'
 import {BASE_IMG_URL} from "../../utils/constants";
+
 /*
-用于图片上传的组件
+For image uploading
  */
 export default class PicturesWall extends React.Component {
 
@@ -15,14 +16,14 @@ export default class PicturesWall extends React.Component {
   }
 
   state = {
-    previewVisible: false, // 标识是否显示大图预览Modal
-    previewImage: '', // 大图的url
+    previewVisible: false, // whether to preview
+    previewImage: '', // url
     fileList: [
       /*{
-        uid: '-1', // 每个file都有自己唯一的id
-        name: 'xxx.png', // 图片文件名
-        status: 'done', // 图片状态: done-已上传, uploading: 正在上传中, removed: 已删除
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png', // 图片地址
+        uid: '-1', // each file has its own unique id
+        name: 'xxx.png', // image file name
+        status: 'done', // status: done, uploading, removed
+        url: '', // url
       },*/
     ],
   }
@@ -32,75 +33,60 @@ export default class PicturesWall extends React.Component {
 
     let fileList = []
 
-    // 如果传入了imgs属性
     const {imgs} = this.props
     if (imgs && imgs.length>0) {
       fileList = imgs.map((img, index) => ({
-        uid: -index, // 每个file都有自己唯一的id
-        name: img, // 图片文件名
-        status: 'done', // 图片状态: done-已上传, uploading: 正在上传中, removed: 已删除
+        uid: -index,
+        name: img,
+        status: 'done', 
         url: BASE_IMG_URL + img
       }))
     }
 
-    // 初始化状态
     this.state = {
-      previewVisible: false, // 标识是否显示大图预览Modal
-      previewImage: '', // 大图的url
-      fileList // 所有已上传图片的数组
+      previewVisible: false, 
+      previewImage: '',
+      fileList 
     }
   }
 
-  /*
-  获取所有已上传图片文件名的数组
-   */
   getImgs  = () => {
     return this.state.fileList.map(file => file.name)
   }
 
-  /*
-  隐藏Modal
-   */
   handleCancel = () => this.setState({ previewVisible: false });
 
   handlePreview = file => {
     console.log('handlePreview()', file)
-    // 显示指定file对应的大图
     this.setState({
       previewImage: file.url || file.thumbUrl,
       previewVisible: true,
     });
   };
 
-  /*
-  file: 当前操作的图片文件(上传/删除)
-  fileList: 所有已上传图片文件对象的数组
-   */
   handleChange = async ({ file, fileList }) => {
     console.log('handleChange()', file.status, fileList.length, file===fileList[fileList.length-1])
 
-    // 一旦上传成功, 将当前上传的file的信息修正(name, url)
     if(file.status==='done') {
-      const result = file.response  // {status: 0, data: {name: 'xxx.jpg', url: '图片地址'}}
+      const result = file.response  // {status: 0, data: {name: 'xxx.jpg', url: ''}}
       if(result.status===0) {
-        message.success('上传图片成功!')
+        message.success('Upload image successfully!')
         const {name, url} = result.data
         file = fileList[fileList.length-1]
         file.name = name
         file.url = url
       } else {
-        message.error('上传图片失败')
+        message.error('Failed to upload image')
       }
-    } else if (file.status==='removed') { // 删除图片
+    } else if (file.status==='removed') { // delete the image
       const result = await reqDeleteImg(file.name)
       if (result.status===0) {
-        message.success('删除图片成功!')
+        message.success('Delete image successfully!')
       } else {
-        message.error('删除图片失败!')
+        message.error('Failed to delete image!')
       }
     }
 
-    // 在操作(上传/删除)过程中更新fileList状态
     this.setState({ fileList })
   };
 
@@ -115,11 +101,11 @@ export default class PicturesWall extends React.Component {
     return (
       <div>
         <Upload
-          action="/manage/img/upload" /*上传图片的接口地址*/
-          accept='image/*'  /*只接收图片格式*/
-          name='image' /*请求参数名*/
-          listType="picture-card"  /*卡片样式*/
-          fileList={fileList}  /*所有已上传图片文件对象的数组*/
+          action="/manage/img/upload" /*upload address*/
+          accept='image/*'  /*only accept image*/
+          name='image' /*request param*/
+          listType="picture-card"  /*card type*/
+          fileList={fileList}  /*uploaded image list*/
           onPreview={this.handlePreview}
           onChange={this.handleChange}
         >

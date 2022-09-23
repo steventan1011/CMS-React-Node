@@ -1,5 +1,5 @@
 
 export default {
-  user: {}, 
-  product: {}, 
+  user: {},   // current user
+  product: {},  // current product
 }

@@ -37,7 +37,7 @@ class Admin extends Component {
                   <Route path="/" element={<Navigate to ="/home" />}/>
                   <Route path='home' element={<Home />}/>
                   <Route path='/category' element={<Category />}/>
-                  <Route path='/product' element={<Product />}/>
+                  <Route path='/product/*' element={<Product />}/>
                   <Route path='/role' element={<Role />}/>
                   <Route path='/user' element={<User />}/>
                   <Route path='/charts/bar' element={<Bar />}/>

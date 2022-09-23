@@ -1,6 +1,3 @@
-/*
-用来指定商品详情的富文本编辑器组件
- */
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {EditorState, convertToRaw, ContentState} from 'draft-js'
@@ -9,7 +6,7 @@ import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
-
+// For rich text editor
 export default class RichTextEditor extends Component {
   
   static propTypes = {
@@ -17,13 +14,13 @@ export default class RichTextEditor extends Component {
   }
   
   state = {
-    editorState: EditorState.createEmpty(), // 创建一个没有内容的编辑对象
+    editorState: EditorState.createEmpty(),
   }
 
   constructor(props) {
     super(props)
     const html = this.props.detail
-    if (html) { // 如果有值, 根据html格式字符串创建一个对应的编辑对象
+    if (html) {
       const contentBlock = htmlToDraft(html)
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
       const editorState = EditorState.createWithContent(contentState)
@@ -32,15 +29,12 @@ export default class RichTextEditor extends Component {
       }
     } else {
       this.state = {
-        editorState: EditorState.createEmpty(), // 创建一个没有内容的编辑对象
+        editorState: EditorState.createEmpty(),
       }
     }
 
   }
 
-  /*
-  输入过程中实时的回调
-   */
   onEditorStateChange = (editorState) => {
     console.log('onEditorStateChange()')
     this.setState({
@@ -49,7 +43,6 @@ export default class RichTextEditor extends Component {
   }
 
   getDetail = () => {
-    // 返回输入数据对应的html格式的文本
     return draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
   }
 
@@ -63,7 +56,7 @@ export default class RichTextEditor extends Component {
         xhr.send(data)
         xhr.addEventListener('load', () => {
           const response = JSON.parse(xhr.responseText)
-          const url = response.data.url // 得到图片的url
+          const url = response.data.url 
           resolve({data: {link: url}})
         })
         xhr.addEventListener('error', () => {

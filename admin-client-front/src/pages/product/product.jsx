@@ -4,6 +4,8 @@ import {Routes, Route, Navigate} from 'react-router-dom'
 import ProductHome from './home'
 import ProductAddUpdate from './add-update'
 import ProductDetail from './detail'
+import NotFound from '../not-found/not-found'
+import ProductTest from './test'
 
 import './product.less'
 
@@ -14,10 +16,11 @@ export default class Product extends Component {
   render() {
     return (
       <Routes>
-        <Route path='/product' element={<ProductHome />} exact/> {/*路径完全匹配*/}
-        <Route path='/product/addupdate' element={<ProductAddUpdate />}/>
-        <Route path='/product/detail' element={<ProductDetail />}/>
-        {/* <Route path="/" element={<Navigate to ="/product" />}/> */}
+        <Route path='/' element={<ProductHome />} exact/>
+        <Route path='/addupdate' element={<ProductAddUpdate />}/>
+        <Route path='/detail' element={<ProductDetail />}/>
+        <Route path='/test' element={<ProductTest />}/>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     )
   }
