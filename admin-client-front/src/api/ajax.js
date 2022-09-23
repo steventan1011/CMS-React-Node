@@ -18,7 +18,7 @@ export default function ajax(url, data = {}, type = 'GET') {
                 resolve(response.data)
             })
             .catch(error => {
-                message.error('请求出错了: ' + error.message)
+                message.error('Error to request: ' + error.message)
             })
         })
 
