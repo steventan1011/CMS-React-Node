@@ -27,6 +27,12 @@ class ProductHome extends Component {
     searchType: 'productName', // by which to search
   }
 
+  constructor (props) {
+    super(props)
+    
+    this.initColumns()
+  }
+
   initColumns = () => {
     this.columns = [
       {
@@ -132,7 +138,6 @@ class ProductHome extends Component {
   }
 
   componentDidMount () {
-    this.initColumns()
     this.getProducts(1)
   }
 

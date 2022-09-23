@@ -25,6 +25,7 @@ export default class AuthForm extends PureComponent {
     this.state = {
       checkedKeys: menus
     }
+    this.treeNodes = this.getTreeNodes(menuList)
   }
 
   /*
@@ -50,10 +51,6 @@ export default class AuthForm extends PureComponent {
     this.setState({ checkedKeys });
   };
 
-
-  componentWillMount () {
-    this.treeNodes = this.getTreeNodes(menuList)
-  }
 
   /*
   Called automatically when the component receives a new property

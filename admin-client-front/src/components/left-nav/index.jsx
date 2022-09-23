@@ -14,6 +14,12 @@ const SubMenu = Menu.SubMenu;
 
 class LeftNav extends Component {
 
+  constructor(props) {
+    super(props)
+    
+    this.menuNodes = this.getMenuNodes(menuList)
+  }
+
   /*
   Determine whether the currently logged in user has permission to the item
    */
@@ -74,14 +80,6 @@ class LeftNav extends Component {
        }
      })
    }
-
-  /*
-    Execute once before the first render()
-    Prepare data for the first render() (must be synchronized)
-   */
-  componentWillMount () {
-    this.menuNodes = this.getMenuNodes(menuList)
-  }
 
   render() {
     // debugger

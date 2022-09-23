@@ -34,6 +34,7 @@ class Role extends Component {
     super(props)
     this.addFormRef = React.createRef()
     this.authFormRef = React.createRef()
+    this.initColumn()
   }
 
   initColumn = () => {
@@ -147,10 +148,6 @@ class Role extends Component {
         })
       }
     }
-  }
-
-  componentWillMount () {
-    this.initColumn()
   }
 
   componentDidMount () {

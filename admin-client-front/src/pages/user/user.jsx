@@ -26,6 +26,12 @@ export default class User extends Component {
     isShow: false, // whether to show confirmation box
   }
 
+  constructor(props) {
+    super(props)
+
+    this.initColumns()
+  }
+
   initColumns = () => {
     this.columns = [
       {
@@ -146,7 +152,6 @@ export default class User extends Component {
   }
 
   componentDidMount () {
-    this.initColumns()
     this.getUsers()
   }
 

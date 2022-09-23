@@ -30,6 +30,12 @@ export default class Category extends Component {
     showStatus: 0, // Whether the confirmation box for adding/updating is displayed, 0: not displayed, 1: displayed added, 2: displayed updated
   }
 
+  constructor(props) {
+    super(props)
+    
+    this.initColumns()
+  }
+
   /*
   Initialize an array of all columns of the Table
    */
@@ -199,15 +205,6 @@ export default class Category extends Component {
       .catch(errorInfo => console.log("FAILED", errorInfo))
   }
 
-
-
-
-  /*
-  Prepare data for the first render()
-   */
-  componentWillMount () {
-    this.initColumns()
-  }
 
   /*
   Execute asynchronous tasks: send asynchronous ajax requests
