@@ -8,9 +8,6 @@ import './login.less'
 import logo from '../../assets/images/logo.png'
 import {login} from '../../redux/actions'
 
-import Home from '../home/home'
-import Admin from '../admin/admin'
-
 class Login extends Component {
 
     /*

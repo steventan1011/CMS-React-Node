@@ -20,8 +20,6 @@ const Item = Form.Item
 
 class Role extends Component {
 
-  
-
   state = {
     roles: [], // List of all roles
     role: {}, // selected role

@@ -18,8 +18,6 @@ const Option = Select.Option
 
 export default class User extends Component {
 
-  userFormRef = React.createRef()
-
   state = {
     users: [], // user list
     roles: [], // role list
@@ -30,6 +28,7 @@ export default class User extends Component {
     super(props)
 
     this.initColumns()
+    this.userFormRef = React.createRef()
   }
 
   initColumns = () => {

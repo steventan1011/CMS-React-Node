@@ -18,8 +18,6 @@ const Item = Form.Item
 const Option = Select.Option
 
 export default class Category extends Component {
-  addFormRef = React.createRef()
-  updateFormRef = React.createRef()
 
   state = {
     loading: false, // whether is requiring data
@@ -32,8 +30,10 @@ export default class Category extends Component {
 
   constructor(props) {
     super(props)
-    
+
     this.initColumns()
+    this.addFormRef = React.createRef()
+    this.updateFormRef = React.createRef()
   }
 
   /*
